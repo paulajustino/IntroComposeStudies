@@ -3,6 +3,9 @@ package com.example.jetpackcomposestudies
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -112,8 +115,16 @@ private fun GreetingsPreview() {
 
 @Composable
 private fun Greeting(name: String) {
-    val expanded = remember { mutableStateOf(false) }
-    val bottomPadding = if (expanded.value) 72.dp else 24.dp
+    var expanded by remember { mutableStateOf(false) }
+    // val bottomPadding = if (expanded.value) 72.dp else 24.dp
+    val bottomPadding by animateDpAsState(
+        if (expanded) 72.dp else 24.dp,
+        // animationSpec personaliza a animação
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ), label = ""
+    )
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
@@ -124,7 +135,7 @@ private fun Greeting(name: String) {
                 start = 24.dp,
                 end = 24.dp,
                 top = 24.dp,
-                bottom = bottomPadding
+                bottom = bottomPadding.coerceAtLeast(0.dp) // função garante que padding nunca seja negativo
             )
         ) {
             Column(modifier = Modifier.weight(1f)) {
@@ -133,9 +144,9 @@ private fun Greeting(name: String) {
             }
 
             ElevatedButton(
-                onClick = { expanded.value = !expanded.value },
+                onClick = { expanded = !expanded },
             ) {
-                Text(if (expanded.value) "Show less" else "Show more")
+                Text(if (expanded) "Show less" else "Show more")
             }
         }
     }
