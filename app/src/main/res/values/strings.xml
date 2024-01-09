@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JetpackComposeStudies</string>
+    <string name="show_less_button">Show less</string>
+    <string name="show_more_button">Show more</string>
+    <string name="welcome_text_onboarding_screen">Welcome to the Basics Codelab!</string>
+    <string name="continue_button">Continue</string>
 </resources>
